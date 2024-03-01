@@ -1,0 +1,38 @@
+---
+- name: Display help information
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display help information
+      ansible.builtin.debug:
+        msg: |
+          Usage: ansible-playbook evernode/config-extrafee.yml -e "nodes=<value> [extrafee=<value>]"
+
+          Description:
+            This playbook will display or configure extrafee.
+
+          Options:
+            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02 evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+            - extrafee: Optional. If not specified, return current extrafee value. If specified, configure node to use new extrafee.
+
+          Example:
+            ansible-playbook evernode/config-extrafee.yml -e "nodes=evernode" will show the current extrafee for the group "evernode" as defined in /etc/ansible/hosts.
+            ansible-playbook evernode/config-extrafee.yml -e "nodes=evr-node02,evr-node05 extrafee=3600" will configure the extrafee on those two nodes only to 3600 drops.
+  tags: [help]
+
+- name: config extrafee
+  hosts: "{{ nodes | default('localhost') }}"
+  gather_facts: no
+  become: true
+  tags: [main]
+
+  tasks:
+    - name: run evernode config extrafee
+      ansible.builtin.command: evernode config extrafee "{{ extrafee | default('') }}"
+      register: evernode_config_extrafee_output
+      when: "'help' not in (ansible_run_tags | default([]))"
+
+    - name: show output
+      debug:
+        var: evernode_config_extrafee_output.stdout_lines
+      when: "'help' not in (ansible_run_tags | default([]))"
