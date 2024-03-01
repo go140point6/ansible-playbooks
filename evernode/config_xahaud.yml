@@ -1,0 +1,38 @@
+---
+- name: Display help information
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display help information
+      ansible.builtin.debug:
+        msg: |
+          Usage: ansible-playbook evernode/config_xahaud.yml -e "nodes=<value> [xahaud=<value>]"
+
+          Description:
+            This playbook will display or configure xahaud.
+
+          Options:
+            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02 evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+            - xahaud: Optional. If not specified, return current xahaud value. If specified, configure node to use new xahaud.
+
+          Example:
+            ansible-playbook evernode/config_xahaud.yml -e "nodes=evernode" will show the current xahaud for the group "evernode" as defined in /etc/ansible/hosts.
+            ansible-playbook evernode/config_xahaud.yml -e "nodes=evr-node02,evr-node05 xahaud=wss://xahau.network" will configure the xahaud on those two nodes only to use websocket wss://xahau.network.
+  tags: [help]
+
+- name: config xahaud
+  hosts: "{{ nodes | default('localhost') }}"
+  gather_facts: no
+  become: true
+  tags: [main]
+
+  tasks:
+    - name: run evernode config xahaud
+      ansible.builtin.command: evernode config xahaud "{{ xahaud | default('') }}"
+      register: command_output
+      when: "'help' not in (ansible_run_tags | default([]))"
+
+    - name: show output
+      debug:
+        var: command_output.stdout_lines
+      when: "'help' not in (ansible_run_tags | default([]))"

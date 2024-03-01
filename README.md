@@ -3,6 +3,7 @@
 ```
 git clone https://github.com/go140point6/ansible-playbooks.git
 cd ansible-playbooks
+git pull ## Over time, plays will be updated and new ones added. This will refresh your repo.
 ```
 
 STOP! If you haven't set up ansible according to [setup-ansible](setup-ansible.md), do it now. These plays are worthless if you don't setup and configure ansible specific to your environment.
