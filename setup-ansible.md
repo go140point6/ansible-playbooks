@@ -25,7 +25,7 @@ sudo visudo ## Look for '# User privilege specification'. Under root, add the fo
     root            ALL=(ALL:ALL) ALL
     ansible         ALL=(ALL:ALL) NOPASSWD:ALL
 
-    Note: to save, type !wq and the Enter key.
+    Note: to save, type :wq and the Enter key.
 
 sudo su ansible ## This switched to the ansible user you just created
 cd ~
