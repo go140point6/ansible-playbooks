@@ -12,7 +12,7 @@
             This playbook will display current status.
 
           Options:
-            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02 evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02,evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
 
           Example:
             ansible-playbook evernode/status.yml -e "nodes=evernode" will show the current status for the group "evernode" as defined in /etc/ansible/hosts.

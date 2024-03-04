@@ -64,6 +64,8 @@ mkdir -p ~/.ssh && chmod 700 ~/.ssh && cd ~/.ssh
 
 STOP! DO NOT create another key-pair, you use the one you already created on the controller server. Copy the authorized_key file to the .ssh folder and you MUST fix the permissions `chmod 0600 authorized_keys`. You can simply create a new file and paste the contents or physically copy the file off the controller and on to your managed server, your choice. DO NOT move the key, you don't need it on 
 
+Be sure to also update your /etc/ssh/sshd_conf file if using an AllowUsers directive and restart the service `sudo systemctl restart sshd.service`
+
 When all is done, you should have a user 'ansible' with an 'authorized_keys' on every server you want to manage.
 
 ## Add your managed hosts to /etc/ansible/hosts file

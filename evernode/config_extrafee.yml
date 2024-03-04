@@ -12,7 +12,7 @@
             This playbook will display or configure extrafee.
 
           Options:
-            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02 evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02,evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
             - extrafee: Optional. If not specified, return current extrafee value. If specified, configure node to use new extrafee.
 
           Example:

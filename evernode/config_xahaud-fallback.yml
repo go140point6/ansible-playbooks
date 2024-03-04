@@ -12,7 +12,7 @@
             This playbook will display or configure xahaud-fallback. Note! You can enter more than one xahaud-fallback server, space separated. Also note the variable is xahaud_fallback because of how ansible interprets the hyphen.
 
           Options:
-            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02 evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+            - nodes: Required. Use "evernode" for the group or specify one or more individual nodes "evr-node02,evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
             - xahaud_fallback: Optional. If not specified, return current xahaud-fallback values. If specified, configure node to use new xahaud-fallback server(s).
 
           Example:
