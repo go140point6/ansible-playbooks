@@ -1,0 +1,30 @@
+---
+- name: Reboot system
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display help information
+      ansible.builtin.debug:
+        msg: |
+          Usage: ansible-playbook common/reboot.yml -e "nodes=<value>"
+
+          Description:
+            This playbook reboots a system.
+
+          Options:
+            - nodes: Required. Use group or specify one or more individual nodes "vps-sandbox01,vps-sandbox02". Dependent on how you set up your /etc/ansible/hosts file.
+
+          Example:
+            ansible-playbook common/reboot.yml -e "nodes=vps-sandbox01"
+  tags: [help]
+
+- name: Reboot system
+  hosts: "{{ nodes | default('localhost') }}"
+  gather_facts: false
+  become: true
+  tags: [main]
+
+  tasks:
+    - name: Reboot the system
+      ansible.builtin.reboot:
+        reboot_timeout: 60

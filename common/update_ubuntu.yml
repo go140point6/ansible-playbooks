@@ -1,0 +1,46 @@
+---
+- name: Update Ubuntu system
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display help information
+      ansible.builtin.debug:
+        msg: |
+          Usage: ansible-playbook common/update_ubuntu.yml -e "nodes=<value>"
+
+          Description:
+            This playbook updates an Ubuntu system by running apt-get update, apt-get upgrade, apt-get dist-upgrade, apt autoremove and then reboots the system.
+
+          Options:
+            - nodes: Required. Use group or specify one or more individual nodes "vps-sandbox01,vps-sandbox02". Dependent on how you set up your /etc/ansible/hosts file.
+
+          Example:
+            ansible-playbook common/update_ubuntu.yml -e "nodes=vps-sandbox01"
+  tags: [help]
+
+- name: Update Ubuntu system
+  hosts: "{{ nodes | default('localhost') }}"
+  gather_facts: false
+  become: true
+  tags: [main]
+
+  tasks:
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Upgrade packages
+      ansible.builtin.apt:
+        upgrade: yes
+
+    - name: Upgrade distribution packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Remove unused packages
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Reboot the system
+      ansible.builtin.reboot:
+        reboot_timeout: 20

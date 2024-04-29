@@ -1,0 +1,38 @@
+---
+- name: Display help information
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display help information
+      ansible.builtin.debug:
+        msg: |
+          Usage: ansible-playbook common/netstat-port.yml -e "nodes=<value> target_port=<value>"
+
+          Description:
+            This playbook will check current established connections to a particular port
+
+          Options:
+            - nodes: Required. Use group or specify one or more individual nodes "evr-node02,evr-node05". Dependent on how you set up your /etc/ansible/hosts file.
+
+          Example:
+            ansible-playbook common/netstat_port.yml -e "nodes=evernode target_port=443" will show the current established connections to 443 for the group "evernode" as defined in /etc/ansible/hosts.
+  tags: [help]
+
+- name: netstat_port
+  hosts: "{{ nodes | default('localhost') }}"
+  gather_facts: no
+  become: true
+  tags: [main]
+
+  tasks:
+    - name: run netstat -an | grep :{{ target_port }}
+      ansible.builtin.shell:
+        cmd: netstat -an | grep :{{ target_port }}
+      register: command_output
+
+      when: "'help' not in (ansible_run_tags | default([]))"
+
+    - name: show output
+      debug:
+        var: command_output.stdout_lines
+      when: "'help' not in (ansible_run_tags | default([]))"
